@@ -1,0 +1,102 @@
+﻿@model InvoiceLineItem
+@{
+    ViewData["Title"] = "Index";
+    var vendor = ViewBag.Vendor;
+    var baseClassName = "table-nav";
+    var activeClassName = " table-nav-active";
+    var className = "";
+    int activeInvoice = (int)ViewData["ActiveInvoice"];
+    string activeInvoiceNumber = "0";
+    var invoices = ViewBag.Invoices;
+    var invoiceLines = ViewBag.InvoiceLines;
+}
+
+<br />
+<br />
+<div class="row">
+    <h2 class="col-sm-9">Invoices for @vendor.VendorName</h2>
+    <a asp-controller="Vendors" asp-action="Index" asp-route-activeCategory="@ViewData["ActiveCategory"]" class="col-sm-3">
+        Return to @ViewData["ActiveCategory"] Vendors
+    </a>
+</div>
+<br />
+<br />
+<div class="row">
+    <p class="col-sm-10 font-weight-light">Address: @vendor.VendorAddress1 @vendor.VendorAddress2 @vendor.VendorCity</p>
+    <p class="col-sm-2 font-weight-light">Terms: @ViewBag.Term.TermsDueDays days</p>
+</div>
+
+<div class="row">
+    <div class="col-sm-6">
+        <p class="font-weight-bold">Invoices:</p>
+        @if (invoices.Count != 0)
+        {
+            <table>
+                @foreach (var invoice in invoices)
+                {
+                    if (activeInvoice == invoice.InvoiceId)
+                    {
+                        className = baseClassName + activeClassName;
+                        activeInvoiceNumber = invoice.InvoiceNumber;
+                    }
+                    else
+                    {
+                        className = baseClassName;
+                    }
+                    <tr>
+                        <td>
+                            <a class="@className" asp-controller="Invoices" asp-action="Index" asp-route-vendorId="@vendor.VendorId" asp-route-invoiceId="@invoice.InvoiceId" asp-route-activeCategory="@ViewData["ActiveCategory"]">Invoice @invoice.InvoiceNumber</a>
+                        </td>
+                    </tr>
+                }
+            </table>
+        }
+    </div>
+    <div class="col-sm-6">
+        @if (activeInvoice != 0)
+        {
+            <p class="font-weight-bold">Line items for Invoice @activeInvoiceNumber</p>
+            <br />
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>Description</th>
+                        <th>Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var lineItem in invoiceLines)
+                    {
+                        <tr>
+                            <td>@lineItem.LineItemDescription</td>
+                            <td>$@lineItem.LineItemAmount.ToString()</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        <form asp-controller="Invoices" asp-action="Add" asp-route-vendorId="@vendor.VendorId" asp-route-activeCategory="@ViewData["ActiveCategory"]" >
+            <div class="row form-group">
+                <div class="col-sm-3">
+                    <label>Description:</label>
+                </div>
+                <div class="col-sm-6">
+                    <input type="text" class="form-control" asp-for="LineItemDescription" />
+                </div>
+            </div>
+            <div class="row form-group">
+                <div class="col-sm-3"><label>Amount:</label></div>
+                <div class="col-sm-3">
+                    <input type="number" class="form-control" step="0.01" asp-for="LineItemAmount" placeholder="0.00" />
+                </div>
+            </div>
+            <input type="hidden" asp-for="InvoiceId" value="@activeInvoice" />
+            <input type="hidden" asp-for="AccountNumber" value="@vendor.DefaultAccountNumber" />
+            <input type="hidden" asp-for="InvoiceSequence" value="@ViewData["newInvoiceSequence"]" />
+
+            <input type="submit" class="btn btn-primary" value="Add new line item" />
+        </form>
+    </div>
+
+
+</div>

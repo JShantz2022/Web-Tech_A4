@@ -1,0 +1,99 @@
+﻿@model List<Vendor>
+@{
+    ViewData["Title"] = "Index";
+    var baseClassName = "nav-link";
+    var className = "";
+    string actveCategory = (string)ViewData["ActiveCategory"];
+}
+
+<br />
+<h1>Vendors</h1>
+<br /><br />
+<div class="row">
+    <ul class="nav nav-tabs">
+        @if (actveCategory == "A - E")
+        {
+            className = baseClassName + " active";
+        }
+        else
+        {
+            className = baseClassName;
+        }
+        <li class="nav-item">
+            <a class="@className" asp-controller="Vendors" asp-action="Index" asp-route-activeCategory="A - E">A - E</a>
+        </li>
+
+        @if (actveCategory == "F - K")
+        {
+            className = baseClassName + " active";
+        }
+        else
+        {
+            className = baseClassName;
+        }
+        <li class="nav-item">
+            <a class="@className" asp-controller="Vendors" asp-action="Index" asp-route-activeCategory="F - K">F - K</a>
+        </li>
+
+        @if (actveCategory == "L - R")
+        {
+            className = baseClassName + " active";
+        }
+        else
+        {
+            className = baseClassName;
+        }
+        <li class="nav-item">
+            <a class="@className" asp-controller="Vendors" asp-action="Index" asp-route-activeCategory="L - R">L - R</a>
+        </li>
+
+        @if (actveCategory == "S - Z")
+        {
+            className = baseClassName + " active";
+        }
+        else
+        {
+            className = baseClassName;
+        }
+        <li class="nav-item">
+            <a class="@className" asp-controller="Vendors" asp-action="Index" asp-route-activeCategory="S - Z">S - Z</a>
+        </li>
+    </ul>
+</div>
+<br />
+<div class="row">
+    <a asp-controller="Vendor" asp-action="Add" asp-route-activeCategory="@actveCategory" class="col-sm-6">Add new vendor</a>
+    @if (TempData.ContainsKey("Message"))
+    {
+        <p class="col">
+            The vendor "@TempData["Message"]" was deleted.
+            <a asp-controller="Vendor" asp-action="Undo" asp-route-vendorId="@TempData["vendorId"]" asp-route-activeCategory="@actveCategory">Undo</a> this delete
+        </p>
+    }
+</div>
+<br />
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Address</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var vendor in Model)
+        {
+            <tr>
+                <td>@vendor.VendorName</td>
+                <td>@vendor.VendorAddress1 @vendor.VendorCity</td>
+                <td>
+                    <a asp-controller="Invoices" asp-action="Index" asp-route-vendorId="@vendor.VendorId" asp-route-activeCategory="@actveCategory">Invoices</a>
+                    <span>|</span>
+                    <a asp-controller="Vendor" asp-action="Edit" asp-route-vendorId="@vendor.VendorId" asp-route-activeCategory="@actveCategory">Edit</a>
+                    <span>|</span>
+                    <a asp-controller="Vendor" asp-action="Delete" asp-route-vendorId="@vendor.VendorId" asp-route-activeCategory="@actveCategory">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

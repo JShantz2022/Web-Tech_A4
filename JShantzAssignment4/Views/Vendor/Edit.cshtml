@@ -1,0 +1,141 @@
+﻿@model Vendor 
+@{
+    string title = ViewData["Action"] + " a vendor";
+    ViewBag.Title = title;
+}
+
+@section scripts{
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+ }
+
+<h2>@title</h2>
+
+<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+<form asp-controller="Vendor" asp-action="@ViewData["Action"]" asp-route-activeCategory="@ViewData["ActiveCategory"]" method="post">
+    <div class="form-group row">
+        <div class="col-sm-2"><label>Name:</label></div>
+        <div class="col-sm-4">
+            <input type="text" asp-for="VendorName" class="form-control" />
+        </div>
+        <div class="col">
+            <span asp-validation-for="VendorName" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <div class="col-sm-2"><label>Address 1:</label></div>
+        <div class="col-sm-4">
+            <input type="text" asp-for="VendorAddress1" class="form-control" />
+        </div>
+        <div class="col">
+            <span asp-validation-for="VendorAddress1" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <div class="col-sm-2"><label>Address 2:</label></div>
+        <div class="col-sm-4">
+            <input type="text" asp-for="VendorAddress2" class="form-control" />
+        </div>
+        <div class="col">
+            <span asp-validation-for="VendorAddress2" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <div class="col-sm-2"><label>City:</label></div>
+        <div class="col-sm-4">
+            <input type="text" asp-for="VendorCity" class="form-control" />
+        </div>
+        <div class="col">
+            <span asp-validation-for="VendorCity" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <div class="col-sm-2"><label>State</label></div>
+        <div class="col-sm-4">
+            <input type="text" asp-for="VendorState" class="form-control" />
+        </div>
+        <div class="col">
+            <span asp-validation-for="VendorState" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <div class="col-sm-2"><label>Zip Code</label></div>
+        <div class="col-sm-4">
+            <input type="text" asp-for="VendorZipCode" class="form-control" />
+        </div>
+        <div class="col">
+            <span asp-validation-for="VendorZipCode" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <div class="col-sm-2"><label>Phone:</label></div>
+        <div class="col-sm-4">
+            <input type="text" asp-for="VendorPhone" class="form-control" />
+        </div>
+        <div class="col">
+            <span asp-validation-for="VendorPhone" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <div class="col-sm-2"><label>Contact first name:</label></div>
+        <div class="col-sm-4">
+            <input type="text" asp-for="VendorContactFirstName" class="form-control" />
+        </div>
+        <div class="col">
+            <span asp-validation-for="VendorContactFirstName" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <div class="col-sm-2"><label>Contact last name:</label></div>
+        <div class="col-sm-4">
+            <input type="text" asp-for="VendorContactLastName" class="form-control" />
+        </div>
+        <div class="col">
+            <span asp-validation-for="VendorContactLastName" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <div class="col-sm-2"><label>Default terms:</label></div>
+        <div class="col-sm-4">
+            <select asp-for="DefaultTermsId" class="form-control">
+                @foreach (Term term in (List<Term>)ViewData["Terms"])
+                {
+                    <option value="@term.TermsId">@term.TermsDueDays.ToString() days</option>
+                }
+            </select> 
+        </div>
+        <div class="col">
+            <span asp-validation-for="DefaultTermsId" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <div class="col-sm-2"><label>Default acct #:</label></div>
+        <div class="col-sm-4">
+            <select asp-for="DefaultAccountNumber" class="form-control">
+                @foreach (GeneralLedgerAccount account in (List<GeneralLedgerAccount>)ViewData["Accounts"])
+                {
+                    <option value="@account.AccountNumber">@account.AccountDescription (@account.AccountNumber)</option>
+                }
+            </select>
+        </div>
+        <div class="col">
+            <span asp-validation-for="DefaultAccountNumber" class="text-danger"></span>
+        </div>
+    </div>
+
+    <input type="hidden" asp-for="VendorId" />
+
+    <input type="submit" value="@ViewData["Action"]" class="btn btn-primary" />
+    <a asp-controller="Vendors" asp-action="Index" asp-route-activeCategory="@ViewData["ActiveCategory"]" class="btn btn-primary">Cancel</a>
+</form>
